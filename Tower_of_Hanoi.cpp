@@ -4,6 +4,7 @@
 #include<math.h>
 int a[3]={300,600,900},diff=25,co=6,bnum=0,bcnt=0,page=1;
 char strco[2];
+bool isSound = true;
 typedef struct{
        int len1;
        int len2;
@@ -58,9 +59,9 @@ void blockstr()
         b[i].br1=100+25*(co-i-1);
         b[i].br2=25;
         b[i].midlen=b[i].len1+0.5*b[i].len2;
-        b[i].colx=44+rand()%121;
-        b[i].coly=77+rand()%71;
-        b[i].colz=49+rand()%190;
+        b[i].colx=77+rand()%121;
+        b[i].coly=44+rand()%71;
+        b[i].colz=49+rand()%19;
     }
 }
 
@@ -95,6 +96,9 @@ void f()
 
      }
 
+
+
+
 }
 void iDraw()
 {
@@ -103,9 +107,9 @@ void iDraw()
     {
         iShowBMP(0,0,"tower of hanoi.bmp");
         iSetColor(150,10,200);
-        iText(300,525,"how many blocks for tower of hanoi?(3 to 8)",GLUT_BITMAP_TIMES_ROMAN_24);
-        iRectangle (750,525,100,25);
-        iText(760,525,strco,GLUT_BITMAP_TIMES_ROMAN_24);
+        iText(300,580,"How many blocks for tower of hanoi?(3 to 6)",GLUT_BITMAP_TIMES_ROMAN_24);
+        iRectangle (750,575,100,25);
+        iText(760,575,strco,GLUT_BITMAP_TIMES_ROMAN_24);
 
     }
     if (page==2)
@@ -122,7 +126,7 @@ void iDraw()
         iText(500,50,"Tower of Hanoi by Saha Kuljit Shantanu",GLUT_BITMAP_TIMES_ROMAN_24);
         for(int i=0;i<co;i++)
         {
-            glColor4ub(b[i].colx,b[i].coly,b[i].colz,450);
+            glColor4ub(b[i].colx,b[i].coly,b[i].colz,100);
             iFilledRectangle(b[i].len1,b[i].br1,b[i].len2,b[i].br2);
         }
 
@@ -133,6 +137,9 @@ void iDraw()
         iShowBMP(0,0,"tfw.bmp");
 
     }
+    if( isSound == false) iShowBMP(1100,600,"on.bmp");
+    else iShowBMP(1100,600,"off.bmp");
+
 
 }
 void iKeyboard(unsigned char key)
@@ -201,6 +208,19 @@ void iKeyboard(unsigned char key)
 }
 void iMouse(int button,int state,int mx,int my)
 {
+    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+
+        if(mx>1100 && mx<1180 && my>600 && my<680)
+        {
+            if( isSound == true ) isSound = false;
+            else isSound = true;
+            if( isSound == true) PlaySound("fts.wav",NULL,SND_ASYNC|SND_LOOP);
+            else PlaySound("no_sound.wav",NULL,SND_ASYNC|SND_LOOP);
+
+        }
+
+    }
 
 }
 void iMouseMove(int mx,int my)
@@ -215,5 +235,8 @@ int main()
 {
     iSetTimer(25,f);
     PlaySound("fts.wav",NULL,SND_ASYNC|SND_LOOP);
+
+
+
     iInitialize(1200,700,"Tower Of Hanoi");
 }
